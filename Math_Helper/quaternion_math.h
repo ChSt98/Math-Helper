@@ -35,7 +35,18 @@ class Quaternion {
             z = 0.0f;
         }
 
+        /**
+         * Creates a Quaternion where the rotational axis
+         * is around the given Vector (Does not need to be a unit vector)
+         * and the rotation of "angle" [Rad].
+         *
+         * @param values axis[Vector] and angle[Rad]
+         * @return none.
+         */
+
         Quaternion(Vector axis, float angle) {
+
+            axis.normalize();
 
             angle /= 2.0f;
             float sa = sinf(angle);
@@ -47,26 +58,48 @@ class Quaternion {
 
         }
         
-        Quaternion(float nw, float nx, float ny, float nz) {
-            w = nw;
-            x = nx;
-            y = ny;
-            z = nz;
+        Quaternion(float w, float x, float y, float z) {
+            this->w = w;
+            this->x = x;
+            this->y = y;
+            this->z = z;
         }
 
-        Quaternion(float nx, float ny, float nz) {
-            w = 0.0f;
-            x = nx;
-            y = ny;
-            z = nz;
+        /**
+         * Simpler version of Quaternion(float nw, float nx, float ny, float nz)
+         * but w is set to 0.
+         *
+         * @param values x, y and z
+         * @return none.
+         */
+
+        Quaternion(float x, float y, float z) {
+            this->w = 0.0f;
+            this->x = x;
+            this->y = y;
+            this->z = z;
         }
 
-
-        Quaternion getConjugate() {
-            return Quaternion(w, -x, -y, -z);
+        /**
+         * Conjugates the Quaternion 
+         *
+         * @param values none
+         * @return copy of conjugated Quaternion.
+         */
+        Quaternion conjugate() {
+            x = -x;
+            y = -y;
+            y = -z;
+            return *this;
         }
 
-        
+        /**
+         * Computes the Magnitude (Length) of
+         * the Quaternion
+         *
+         * @param values none
+         * @return Magnitude.
+         */
         float getMagnitude() {
 
             float m = w*w + x*x + y*y + z*z;
@@ -81,14 +114,47 @@ class Quaternion {
 
         }
 
-        
-        void normalize(bool sign = false) {
+        /**
+         * Computes the axis[Unit Vector] of rotation and angle[Rad].
+         *
+         * @param values pointer to axis Vector and angle float
+         * @return none.
+         */
+        void getAxisAngle(Vector *axis, float *angle) {
+
+            angle /= 2.0f;
+            float sa = sinf(angle);
+            
+            w = cosf(angle);
+            x = axis.x*sa;
+            y = axis.y*sa;
+            z = axis.z*sa;
+
+            axis->x = this->x;
+            axis->y = this->y;
+            axis->z = this->z;
+
+            axis->normalize();
+
+            *angle = acos(w*2);
+
+        }
+
+        /**
+         * Normalises the Quaternion (Gives length of 1).
+         * If sign is true then w will be positive
+         * (Makes calculations sometimes more reliable)
+         *
+         * @param values sign
+         * @return normalized Quaternion.
+         */
+        Quaternion normalize(bool sign = false) {
 
             float m = getMagnitude();
 
             if (valid) {
 
-                if (sign) m = -m;
+                if (sign && w < 0) m = -m;
                 
                 w /= m;
                 x /= m;
@@ -97,14 +163,22 @@ class Quaternion {
 
             }
 
-            if (w==w && x==x && y==y && z==z) return; //Check for NAN event
+            if (w==w && x==x && y==y && z==z) return *this; //Check for NAN event
 
             valid = false;
 
+            return *this;
+
         }
         
+        /**
+         * Returns a copy of the Quaternion
+         *
+         * @param values none
+         * @return copy of Quaternion.
+         */
         Quaternion copy() {
-            return Quaternion(w, x, y, z);
+            return *this;
         }
 
         Quaternion operator + (Quaternion b) {
