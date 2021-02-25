@@ -4,6 +4,8 @@
 
 #include "math.h"
 
+#include "WString.h"
+
 
 #ifndef PI
 #define PI 3.1415926541f
@@ -23,14 +25,22 @@ class Vector {
 
         bool valid = true;
 
-
         Vector() {
             x = 0.0f;
             y = 0.0f;
             z = 0.0f;
         }
 
-        Vector(float nx, float ny, float nz) {
+        /**
+         * This constructor sets all components to n.
+         */
+        Vector(const float &n) {
+            x = n;
+            y = n;
+            z = n;
+        }
+
+        Vector(const float &nx, const float &ny, const float &nz) {
             x = nx;
             y = ny;
             z = nz;
@@ -71,7 +81,7 @@ class Vector {
          * @param values none.
          * @return copy of the normalized vector.
          */
-        Vector normalize() {
+        Vector& normalize() {
 
             float mag = magnitude();
 
@@ -253,11 +263,35 @@ class Vector {
 
             return b*(*this*b);
 
+        }
 
+
+        /**
+         * Returns a String containing components.
+         * Form:
+         * x: ..., y: ..., z:...
+         * Where ... is the value.
+         * Default digits is 2.
+         * 
+         *
+         * @param values digits.
+         * @return String.
+         */
+        String toString(uint8_t digits = 2) {
+            return "x: " + String(x, digits) + ", y: " + String(y, digits) + ", z: " + String(z, digits);  
         }
 
 
 };
 
 
-#endif /* _HELPER_3DMATH_H_ */
+//Is a vector with a z component of -9.81.
+#define GRAVITY_VECTOR Vector(0,0,-9.81)
+
+
+/*Vector sqrt(Vector a) {
+    return Vector(sqrt(a.x), sqrt(a.y), sqrt(a.z));
+}*/
+
+
+#endif
