@@ -16,6 +16,9 @@
 #endif
 
 
+class Quaternion;
+
+
 class Vector {
     public:
     
@@ -44,6 +47,14 @@ class Vector {
             x = nx;
             y = ny;
             z = nz;
+        }
+
+        Vector(const Quaternion &quaternion) {
+            
+            x = quaternion.x;
+            y = quaternion.y;
+            z = quaternion.z;
+
         }
 
         /**
