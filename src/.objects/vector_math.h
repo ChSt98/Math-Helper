@@ -115,6 +115,17 @@ class Vector {
         }
 
         /**
+         * Multiplies the vectors components to this scheme:
+         * Vector(x*x, y*y, z*z)
+         *
+         * @param values none.
+         * @return vector.
+         */
+        Vector compWiseMulti(const Vector &vec) {
+            return Vector(x*vec.x, y*vec.y, z*vec.z);
+        }
+
+        /**
          * Adds the components of the vectors.
          *
          * @param values none.
