@@ -193,6 +193,16 @@ class Quaternion {
         }
 
         /**
+         * Returns a copy of the Quaternion
+         *
+         * @param values none
+         * @return copy of Quaternion.
+         */
+        Vector rotateVector(const Vector &vectorToRotate) {
+            return (*this*vectorToRotate*(copy().conjugate())).toVector();
+        }
+
+        /**
          * Returns a String containing components.
          * Form:
          * w: ..., x: ..., y: ..., z:...
@@ -203,15 +213,15 @@ class Quaternion {
          * @param values digits.
          * @return String.
          */
-        String toString(uint8_t digits = 2) {
+        String toString(const uint8_t &digits = 2) {
             return "w: " + String(w, digits) + ", x: " + String(x, digits) + ", y: " + String(y, digits) + ", z: " + String(z, digits);  
         }
 
-        Quaternion operator + (Quaternion b) {
+        Quaternion operator + (const Quaternion &b) {
             return Quaternion(w + b.w, x + b.x, y + b.y, z + b.z);
         }
 
-        Quaternion operator - (Quaternion b) {
+        Quaternion operator - (const Quaternion &b) {
             return Quaternion(w - b.w, x - b.x, y - b.y, z - b.z);
         }
 
@@ -219,29 +229,29 @@ class Quaternion {
             return Quaternion(-w, -x, -y, -z);
         }
 
-        Quaternion operator * (float c) {
+        Quaternion operator * (const float &c) {
             return Quaternion(w*c, x*c, y*c, z*c);
         }
 
-        Quaternion operator / (float c) {
+        Quaternion operator / (const float &c) {
             return Quaternion(w/c, x/c, y/c, z/c);
         }
 
-        void operator *= (float c) {
+        void operator *= (const float &c) {
             w *= c;
             x *= c;
             y *= c;
             z *= c;
         }
 
-        void operator += (Quaternion b) {
+        void operator += (const Quaternion &b) {
             w += b.w;
             x += b.x;
             y += b.y;
             z += b.z;
         }
 
-        Quaternion operator * (Quaternion q) {
+        Quaternion operator * (const Quaternion &q) {
             return Quaternion(
                 w*q.w - x*q.x - y*q.y - z*q.z,  // new w
                 w*q.x + x*q.w + y*q.z - z*q.y,  // new x
